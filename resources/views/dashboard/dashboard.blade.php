@@ -788,28 +788,38 @@
 
 <script>
     var userid = [];
-    jQuery(document).ready(function(){
-      jQuery('#ajaxSubmit').click(function(e){
-          e.preventDefault();
-          
-          $.each($("#share_to option:selected"), function(){            
-            userid.push($(this).val());
-          });
-          // console.log(userid);
-          var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-          jQuery.ajax({
-            url: base_url+'/ajax_share_to',
-            method: 'post',
-            data: { "_token" : CSRF_TOKEN,
-                    'userid': $('#share_to').val()
-            },
-            success: function(result){
-                jQuery('.alert').show();
-                jQuery('.alert').html(result.success);
+    $(document).ready(function () {
+      $('#ajaxSubmit').click(function (e) { 
+        e.preventDefault();
+
+        $.ajax({
+          type: "POST",
+          url: base_url+'/ajax_share_to',
+          data: { '_token' : CSRF_TOKEN,
+                  'dashboard_id' : {{ $item->id }},
+                  'iduser' : $('#share_to').val() },
+          dataType: "JSON",
+          success: function (response) {
+            // console.log(response);
+            if (response==1) {
+              Swal(
+                'Berhasil !',
+                'User berhasil di tambahkan ke dashboard!',
+                'success'
+              )
+              window.location.href = base_url;
+            } else {
+              Swal(
+                  'Failed!',
+                  'User Gagal di tambahkan!',
+                  'error'
+              )
             }
-          });
+          }
         });
       });
+    });
+
   </script>
   @endforeach
 

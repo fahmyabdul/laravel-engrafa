@@ -59,7 +59,7 @@ class DashboardController extends Controller
                 $arrayTarget_percent[] = $surveyProcess[$i]->target_percent;
             }
         }
-        // dd($arrayProcess);
+        // dd($surveyProcess);
         
         $data['dashboards']    = $name_dashboard->toArray();
         $data['surveys']       = $list_survey;
@@ -148,7 +148,25 @@ class DashboardController extends Controller
 
     public function ajax_share_to(Request $request) {
         $userid = Auth::user()->id;
+        // dd($request->iduser);
+        foreach ($request->iduser as $k => $v) {
+            $input_dashboard_users = [
+                'dashboard' => $request->dashboard_id,
+                'user' => $v,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
 
-        echo json_encode($request->userid);
+            $insert_users_to_dashboard = DB::table('dashboard_users')->insert($input_dashboard_users);
+        }
+
+        if ($insert_users_to_dashboard) {
+            $response = 1;
+        } else {
+            $response = 0;
+        }
+
+        return response()->json($response);
+        // echo json_encode($request->iduser);
     }
 }
