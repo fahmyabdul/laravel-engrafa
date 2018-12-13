@@ -38,14 +38,7 @@ class IndexController extends Controller
 
     public function index(Request $request)
     {
-
-        // masih belm nge-refer ke si folder yg terakhir
-        /*$root_folder_id = $request->get('folder_id');
-        if ($root_folder_id != null){
-           $this->getListDetail($root_folder_id);
-        }*/
         return view('index.index');
-
     }
 
     /**
@@ -282,7 +275,7 @@ class IndexController extends Controller
 
             if ($folderId == 0){
                 $folder_root = 0;
-                $file_url = '/storage/index/'. $file->getClientOriginalName();
+                $file_url = '/'. $file->getClientOriginalName();
 
             } else {
                 $folder_root = $folderId; //$current_folder['folder_root'];
